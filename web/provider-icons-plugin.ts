@@ -32,7 +32,10 @@ export function providerIconsPlugin(options: ProviderIconsPluginOptions = {}): P
       }
       cachedModule ??= options.iconUrls
         ? Promise.resolve(serializeProviderIcons(options.iconUrls))
-        : loadProviderIconsModule();
+        : loadProviderIconsModule().catch((error) => {
+            console.warn(`[oomol-provider-icons] ${error instanceof Error ? error.message : error}; building without remote provider icons`);
+            return serializeProviderIcons({});
+          });
       return cachedModule;
     },
   };
