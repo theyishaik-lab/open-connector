@@ -94,6 +94,21 @@
   border-top: 1px solid var(--sidebar-border);
 }
 
+.sidebar-source {
+  display: inline-flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.sidebar-source:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
 .language-select {
   display: grid;
   grid-column: 1 / -1;
@@ -371,6 +386,10 @@
   }
 
   .runtime-status {
+    display: none;
+  }
+
+  .sidebar-source span {
     display: none;
   }
 

@@ -53,6 +53,7 @@
     "primaryNav": "Principal",
     "refreshData": "Actualiser les données",
     "logout": "Se déconnecter",
+    "sourceCode": "Code source sur GitHub",
     "theme": "Thème",
     "themeMode": {
       "auto": "Automatique",
