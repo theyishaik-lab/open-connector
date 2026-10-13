@@ -147,22 +147,9 @@ describe("token grant user flows", () => {
   });
 
   it("sets WhatsAI to Gmail read plus YouTube, without drafts or send", () => {
-    let draft = toggleService(
-      { services: {} },
-      catalog.find((service) => service.service === "gmail")!,
-      true,
-    );
-    draft = toggleKind(
-      draft,
-      catalog.find((service) => service.service === "gmail")!,
-      "write",
-      false,
-    );
-    draft = toggleService(
-      draft,
-      catalog.find((service) => service.service === "youtube")!,
-      true,
-    );
+    let draft = toggleService({ services: {} }, catalog.find((service) => service.service === "gmail")!, true);
+    draft = toggleKind(draft, catalog.find((service) => service.service === "gmail")!, "write", false);
+    draft = toggleService(draft, catalog.find((service) => service.service === "youtube")!, true);
     const policy = tokenPolicyFromGrantDraft(draft, catalog);
     expect(policy.allowedActions).toEqual(["gmail.fetch_emails", "youtube.*"]);
     expect(policy.allowedConnections.sort()).toEqual([gmailId, youtubeId].sort());
