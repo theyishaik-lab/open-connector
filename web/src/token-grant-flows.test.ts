@@ -1,4 +1,5 @@
 import type { ActionDefinition, ConnectionRecord, ProviderDefinition } from "./model";
+
 import { describe, expect, it } from "vitest";
 import {
   emptyTokenGrantDraft,
@@ -90,9 +91,7 @@ const connections = [
 
 const catalog = listGrantServices([gmail, youtube, telegram, github, mxtoolbox], connections);
 
-function policyFromToggles(
-  enable: Array<{ service: string; accountId?: string; actions?: string[] }>,
-) {
+function policyFromToggles(enable: Array<{ service: string; accountId?: string; actions?: string[] }>) {
   let draft = emptyTokenGrantDraft();
   const byService = new Map(catalog.map((service) => [service.service, service]));
   for (const grant of enable) {
@@ -148,9 +147,22 @@ describe("token grant user flows", () => {
   });
 
   it("sets WhatsAI to Gmail read plus YouTube, without drafts or send", () => {
-    let draft = toggleService({ services: {} }, catalog.find((service) => service.service === "gmail")!, true);
-    draft = toggleKind(draft, catalog.find((service) => service.service === "gmail")!, "write", false);
-    draft = toggleService(draft, catalog.find((service) => service.service === "youtube")!, true);
+    let draft = toggleService(
+      { services: {} },
+      catalog.find((service) => service.service === "gmail")!,
+      true,
+    );
+    draft = toggleKind(
+      draft,
+      catalog.find((service) => service.service === "gmail")!,
+      "write",
+      false,
+    );
+    draft = toggleService(
+      draft,
+      catalog.find((service) => service.service === "youtube")!,
+      true,
+    );
     const policy = tokenPolicyFromGrantDraft(draft, catalog);
     expect(policy.allowedActions).toEqual(["gmail.fetch_emails", "youtube.*"]);
     expect(policy.allowedConnections.sort()).toEqual([gmailId, youtubeId].sort());
@@ -259,10 +271,7 @@ describe("token grant user flows", () => {
   });
 
   it("builds the live WhatsAI / Alfred / Grok Gmail matrix from the same catalog", () => {
-    const whatsai = policyFromToggles([
-      { service: "gmail", actions: ["gmail.fetch_emails"] },
-      { service: "youtube" },
-    ]);
+    const whatsai = policyFromToggles([{ service: "gmail", actions: ["gmail.fetch_emails"] }, { service: "youtube" }]);
     const alfred = policyFromToggles([{ service: "gmail", actions: ["gmail.fetch_emails", "gmail.create_draft"] }]);
     const grok = policyFromToggles([{ service: "gmail" }]);
     expect(whatsai.allowedActions).toContain("gmail.fetch_emails");

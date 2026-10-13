@@ -88,12 +88,10 @@ export function createCatalogStore(
   const sortedProviders = sortProviders(providers);
   const executableActions = new Set(options.executableActionIds ?? []);
   const runtimeProviders = sortedProviders.map((provider): RuntimeProviderDefinition => {
-    const actions = provider.actions.map(
-      (action): RuntimeActionDefinition => ({
-        ...action,
-        execution: createActionExecutionStatus(provider, action, executableActions),
-      }),
-    );
+    const actions = provider.actions.map((action): RuntimeActionDefinition => ({
+      ...action,
+      execution: createActionExecutionStatus(provider, action, executableActions),
+    }));
 
     return {
       ...provider,
